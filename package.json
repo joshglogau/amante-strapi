@@ -7,6 +7,8 @@
     "build": "strapi build",
     "deploy": "strapi deploy",
     "develop": "strapi develop",
+    "prebuild": "node ./scripts/clean-stale-api-dirs.js",
+    "prestart": "node ./scripts/clean-stale-api-dirs.js",
     "start": "strapi start",
     "strapi": "strapi"
   },
