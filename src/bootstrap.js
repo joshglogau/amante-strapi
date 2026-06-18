@@ -1,7 +1,7 @@
 'use strict';
 
 const PUBLIC_READ_PERMISSIONS = {
-  blog: ['find', 'findOne'],
+  'blog-post': ['find', 'findOne'],
   author: ['find', 'findOne'],
   category: ['find', 'findOne'],
   tag: ['find', 'findOne'],

@@ -4,7 +4,7 @@ Strapi 5 backend for the Amante Creations website.
 
 ## Content Model
 
-- `Blog Post` (`/api/blog`): title, slug, excerpt, cover image, published date, author, category, tags, rich text blocks body, featured flag, SEO, and optional source URL.
+- `Blog Post` (`/api/blog-posts`): title, slug, excerpt, cover image, published date, author, category, tags, rich text blocks body, featured flag, SEO, and optional source URL.
 - `Author` (`/api/authors`): public byline profile with slug, avatar, bio, and social links.
 - `Category` (`/api/categories`): primary post grouping with optional sort order.
 - `Tag` (`/api/tags`): flexible labels for filtering and discovery.
