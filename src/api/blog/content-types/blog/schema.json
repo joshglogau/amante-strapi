@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "blog_posts",
   "info": {
-    "singularName": "blog",
+    "singularName": "blog-post",
     "pluralName": "blog",
     "displayName": "Blog Post",
     "description": "Editorial posts for Amante Creations"
