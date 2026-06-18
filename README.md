@@ -24,7 +24,7 @@ The starter `Article`, `About`, `Global`, template components, and seed content 
 
 Strapi Cloud runs the deployed app in a hosted environment. The Content-type Builder is only available in development mode, so schema changes should be made in this repo and deployed through the connected Git repository or the Strapi Cloud CLI.
 
-This app includes a bootstrap that grants public `find` and `findOne` permissions for blog posts, authors, categories, and tags so the frontend can read published content.
+After deployment, set public `find` and `findOne` permissions for blog posts, authors, categories, and tags in the Users & Permissions plugin if the frontend should read content without an API token.
 
 ## Notes
 
