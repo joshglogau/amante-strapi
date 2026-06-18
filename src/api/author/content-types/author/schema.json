@@ -5,7 +5,7 @@
     "singularName": "author",
     "pluralName": "authors",
     "displayName": "Author",
-    "description": "Create authors for your content"
+    "description": "Public bylines for blog posts"
   },
   "options": {
     "draftAndPublish": false
@@ -13,21 +13,33 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
     },
     "avatar": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "files", "videos"]
+      "allowedTypes": ["images"]
     },
-    "email": {
+    "bio": {
+      "type": "text"
+    },
+    "instagramUrl": {
       "type": "string"
     },
-    "articles": {
+    "websiteUrl": {
+      "type": "string"
+    },
+    "blogPosts": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::article.article",
+      "target": "api::blog.blog",
       "mappedBy": "author"
     }
   }
