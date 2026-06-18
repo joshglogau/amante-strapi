@@ -39,7 +39,7 @@
     "blogPosts": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::blog-post.blog-post",
+      "target": "api::blog.blog",
       "mappedBy": "author"
     }
   }

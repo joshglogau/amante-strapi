@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const staleApiDirs = ['about', 'article', 'global', 'blog'];
+const staleApiDirs = ['about', 'article', 'global', 'blog-post'];
 const apiRoot = path.join(__dirname, '..', 'src', 'api');
 
 for (const dir of staleApiDirs) {

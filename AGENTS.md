@@ -19,7 +19,7 @@ Strapi 5 backend for the Amante Creations website blog and editorial content.
 
 ## Architecture notes
 - Main entrypoints: `src/index.js`.
-- Important modules: `src/api/blog-post`, `src/api/author`, `src/api/category`, `src/api/tag`, `src/components/shared/seo.json`.
+- Important modules: `src/api/blog`, `src/api/author`, `src/api/category`, `src/api/tag`, `src/components/shared/seo.json`.
 - Sensitive areas: `config/database.js`, Strapi Cloud deployment settings, public API permissions.
 - Generated code / files to avoid editing directly: `types/generated/*` unless regenerating from Strapi.
 
