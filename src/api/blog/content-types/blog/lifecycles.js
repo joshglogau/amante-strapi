@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const REVISION_UID = 'api::blog-revision.blog-revision';
 const MAX_REVISIONS_PER_POST = 25;
+const CLOUDFLARE_PURGE_URL = 'https://api.cloudflare.com/client/v4/zones';
 
 const stableStringify = (value) => JSON.stringify(value ?? null);
 
@@ -96,6 +97,46 @@ const findExistingBlog = async (where) => {
   });
 };
 
+const shouldPurgeCloudflare = (event) => {
+  if (process.env.CLOUDFLARE_PURGE_ON_PUBLISH === 'false') {
+    return false;
+  }
+
+  const data = event.params?.data ?? {};
+  const publishFieldChanged = Object.prototype.hasOwnProperty.call(data, 'publishedAt');
+
+  return publishFieldChanged && !!event.result?.publishedAt;
+};
+
+const purgeCloudflareCache = async (blog) => {
+  const zoneId = process.env.CLOUDFLARE_ZONE_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  if (!zoneId || !apiToken) {
+    strapi.log.warn('Skipping Cloudflare cache purge; CLOUDFLARE_ZONE_ID or CLOUDFLARE_API_TOKEN is missing');
+    return;
+  }
+
+  const response = await fetch(`${CLOUDFLARE_PURGE_URL}/${zoneId}/purge_cache`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ purge_everything: true }),
+  });
+
+  const result = await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(
+      `Cloudflare cache purge failed with status ${response.status}: ${JSON.stringify(result)}`,
+    );
+  }
+
+  strapi.log.info(`Purged Cloudflare cache after publishing blog: ${blog?.slug || blog?.documentId || blog?.id}`);
+};
+
 module.exports = {
   async afterCreate(event) {
     try {
@@ -104,24 +145,50 @@ module.exports = {
     } catch (error) {
       strapi.log.error('Failed to create initial blog body revision', error);
     }
+
+    if (event.result?.publishedAt) {
+      try {
+        await purgeCloudflareCache(event.result);
+      } catch (error) {
+        strapi.log.error('Failed to purge Cloudflare cache after blog publish', error);
+      }
+    }
   },
 
   async afterUpdate(event) {
     const nextBody = event.params?.data?.body;
+    const shouldCreateRevision = nextBody !== undefined;
+    const shouldPurge = shouldPurgeCloudflare(event);
 
-    if (nextBody === undefined) {
+    if (!shouldCreateRevision && !shouldPurge) {
       return;
     }
 
-    try {
-      const updatedBlog = event.result?.body
-        ? event.result
-        : await findExistingBlog(event.params.where);
+    let updatedBlog = event.result;
 
-      await createRevision(updatedBlog, 'saved');
-      await cleanupOldRevisions(updatedBlog);
-    } catch (error) {
-      strapi.log.error('Failed to create blog body revision after save', error);
+    if (shouldCreateRevision && !updatedBlog?.body) {
+      try {
+        updatedBlog = await findExistingBlog(event.params.where);
+      } catch (error) {
+        strapi.log.error('Failed to load blog after save for revision backup', error);
+      }
+    }
+
+    if (shouldCreateRevision) {
+      try {
+        await createRevision(updatedBlog, 'saved');
+        await cleanupOldRevisions(updatedBlog);
+      } catch (error) {
+        strapi.log.error('Failed to create blog body revision after save', error);
+      }
+    }
+
+    if (shouldPurge) {
+      try {
+        await purgeCloudflareCache(updatedBlog);
+      } catch (error) {
+        strapi.log.error('Failed to purge Cloudflare cache after blog publish', error);
+      }
     }
   },
 };

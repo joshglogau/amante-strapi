@@ -27,6 +27,18 @@ Strapi Cloud runs the deployed app in a hosted environment. The Content-type Bui
 
 After deployment, set public `find` and `findOne` permissions for blog posts, authors, categories, and tags in the Users & Permissions plugin if the frontend should read content without an API token.
 
+## Cloudflare Cache Purge
+
+Blog publish events can purge Cloudflare's cache so newly published posts appear on the live site immediately while older post responses stay cacheable between publishes.
+
+Set these environment variables in Strapi Cloud:
+
+- `CLOUDFLARE_ZONE_ID`: Cloudflare zone ID for `amante-creations.com`.
+- `CLOUDFLARE_API_TOKEN`: Cloudflare API token with cache purge permission for the zone.
+- `CLOUDFLARE_PURGE_ON_PUBLISH`: optional; set to `false` to disable automatic purging.
+
+The purge is best-effort and will not block blog publishing if Cloudflare is unavailable or the token is missing.
+
 ## Notes
 
 - Do not commit API tokens or `.env` files.
