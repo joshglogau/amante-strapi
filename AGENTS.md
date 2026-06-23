@@ -19,13 +19,14 @@ Strapi 5 backend for the Amante Creations website blog and editorial content.
 
 ## Architecture notes
 - Main entrypoints: `src/index.js`.
-- Important modules: `src/api/blog`, `src/api/author`, `src/api/category`, `src/api/tag`, `src/components/shared/seo.json`.
+- Important modules: `src/api/blog`, `src/api/blog-revision`, `src/api/author`, `src/api/category`, `src/api/tag`, `src/components/shared/seo.json`.
 - Sensitive areas: `config/database.js`, Strapi Cloud deployment settings, public API permissions.
 - Generated code / files to avoid editing directly: `types/generated/*` unless regenerating from Strapi.
 
 ## Change-specific rules
 - If touching API contracts, update the frontend Strapi service and docs.
 - If touching database schema, consider Cloud schema sync behavior and whether a migration is needed.
+- If touching blog body saves, preserve automatic `Blog Revision` snapshots in `src/api/blog/content-types/blog/lifecycles.js`; snapshots should cover initial, before-update, and after-update states, and revision failures should log but not block the primary blog save.
 - If touching auth or permissions, preserve users-permissions role behavior and verify public reads.
 
 ## Verification

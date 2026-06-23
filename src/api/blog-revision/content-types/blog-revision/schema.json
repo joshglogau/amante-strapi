@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog_revisions",
+  "info": {
+    "singularName": "blog-revision",
+    "pluralName": "blog-revisions",
+    "displayName": "Blog Revision",
+    "description": "Automatic body backups for blog posts"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-type-builder": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "blog": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::blog.blog"
+    },
+    "blogDocumentId": {
+      "type": "string",
+      "required": true
+    },
+    "blogTitle": {
+      "type": "string",
+      "required": true
+    },
+    "blogSlug": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string",
+      "required": true
+    },
+    "bodySnapshot": {
+      "type": "json",
+      "required": true
+    },
+    "bodyText": {
+      "type": "text"
+    },
+    "bodyPreview": {
+      "type": "text"
+    },
+    "bodyHash": {
+      "type": "string",
+      "required": true
+    },
+    "savedAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

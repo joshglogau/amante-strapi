@@ -5,6 +5,7 @@ Strapi 5 backend for the Amante Creations website.
 ## Content Model
 
 - `Blog Post` (`/api/blogs`): title, slug, excerpt, cover image, published date, author, category, tags, rich text blocks body, featured flag, SEO, and optional source URL.
+- `Blog Revision` (`/api/blog-revisions`): automatic body backups for blog posts. A JSON snapshot and plain-text copy are created when a post is first created, before a saved body update overwrites the previous body, and after the new body is saved.
 - `Author` (`/api/authors`): public byline profile with slug, avatar, bio, and social links.
 - `Category` (`/api/categories`): primary post grouping with optional sort order.
 - `Tag` (`/api/tags`): flexible labels for filtering and discovery.
@@ -30,4 +31,5 @@ After deployment, set public `find` and `findOne` permissions for blog posts, au
 
 - Do not commit API tokens or `.env` files.
 - The frontend should populate `coverImage`, `author`, `category`, `tags`, and `seo` when reading blog posts.
+- Blog revisions protect against bad saved overwrites, but they cannot recover text that never reached Strapi because the browser closed, the session expired, or the save request failed. Revision creation is best-effort and will not block the primary blog save.
 - Removing old content-type schemas is intentionally destructive for the old starter models on the next Strapi schema sync.
