@@ -26,7 +26,7 @@ Strapi 5 backend for the Amante Creations website blog and editorial content.
 ## Change-specific rules
 - If touching API contracts, update the frontend Strapi service and docs.
 - If touching database schema, consider Cloud schema sync behavior and whether a migration is needed.
-- If touching blog body saves, preserve automatic `Blog Revision` snapshots in `src/api/blog/content-types/blog/lifecycles.js`; snapshots should cover initial, before-update, and after-update states, and revision failures should log but not block the primary blog save.
+- If touching blog body saves, preserve automatic `Blog Revision` snapshots in `src/api/blog/content-types/blog/lifecycles.js`; snapshots should run after successful body saves, keep a bounded revision history, and log failures without blocking the primary blog save.
 - If touching auth or permissions, preserve users-permissions role behavior and verify public reads.
 
 ## Verification
